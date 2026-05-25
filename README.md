@@ -27,8 +27,8 @@ CF app: agent-a2a-alpha          CF app: agent-a2a-beta
 
 | CF App | Role | Skills |
 |---|---|---|
-| `agent-a2a-alpha` | Orchestrator — delegates tasks to beta | `a2a-requester`, `a2a-smoke` |
-| `agent-a2a-beta` | Worker — runs skill scripts, replies to alpha | `a2a-worker`, `python-script-smoke`, `tanzu-network-release` |
+| `agent-a2a-alpha` | Orchestrator — delegates tasks to beta |  |
+| `agent-a2a-beta` | Worker — runs skill scripts, replies to alpha | `python-script-smoke`, `tanzu-network-release` |
 
 Each app ships an `a2a-peers.yaml` mapping peer aliases to CF app routes. Update URLs after first push.
 

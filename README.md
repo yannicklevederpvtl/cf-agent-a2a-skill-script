@@ -56,19 +56,47 @@ Each app ships an `a2a-peers.yaml` mapping peer aliases to CF app routes. Update
 
 ## Deploy
 
-**First time in a space** — create the MCP CUPS:
+**1. First time in a space** — create the MCP CUPS:
 
 ```bash
 bash scripts/setup_mcp_binding.sh
 ```
 
-**Sync the SkillRunner sidecar** from `cf-agent-skill-script` into each app push tree:
+**2. Sync the SkillRunner sidecar** from `cf-agent-skill-script` into each app push tree:
 
 ```bash
 bash scripts/sync_shared.sh
 ```
 
-**Push both agents:**
+**3. Configure before push** — edit these files for your foundation (do not commit real foundation-specific values if you fork this repo):
+
+**`manifest.yml`** — set `services:` to match your space:
+
+```bash
+cf services   # list instance names in the target space
+```
+
+Update both apps if needed (defaults: `Qwen3.6`, `skill-runner-mcp-local`):
+
+```yaml
+services:
+  - <your-llm-service>
+  - skill-runner-mcp-local
+```
+
+**`apps/agent-a2a-alpha/a2a-peers.yaml`** and **`apps/agent-a2a-beta/a2a-peers.yaml`** — replace `<CF_APPS_DOMAIN>` with your apps domain (e.g. `apps.example.com`):
+
+```yaml
+# alpha points to beta:
+url: https://agent-a2a-beta.apps.example.com
+
+# beta points to alpha:
+url: https://agent-a2a-alpha.apps.example.com
+```
+
+You can derive the domain from `cf target` or your foundation docs — you do not need to push first if app names match `manifest.yml`.
+
+**4. Push both agents:**
 
 ```bash
 cf push -f manifest.yml
@@ -81,16 +109,11 @@ cf push -f manifest.yml agent-a2a-alpha
 cf push -f manifest.yml agent-a2a-beta
 ```
 
-**Update peer URLs** in each app's `a2a-peers.yaml` after first push (these files are gitignored — local overrides only):
+**After push (optional)** — if A2A peers fail to connect, confirm routes and fix `a2a-peers.yaml`, then push again:
 
 ```bash
-# Get your apps domain
-cf app agent-a2a-alpha | grep routes   # e.g. agent-a2a-alpha.apps.<your-domain>
-
-# Replace <CF_APPS_DOMAIN> with your actual apps domain in both files:
-#   apps/agent-a2a-alpha/a2a-peers.yaml
-#   apps/agent-a2a-beta/a2a-peers.yaml
-
+cf app agent-a2a-alpha | grep routes
+cf app agent-a2a-beta | grep routes
 cf push -f manifest.yml
 ```
 

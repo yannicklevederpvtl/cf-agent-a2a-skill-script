@@ -2,6 +2,3 @@
 __pycache__/
 *.pyc
 .DS_Store
-
-# Local peer URL overrides — set real URLs after cf push, do not commit
-apps/*/a2a-peers.yaml

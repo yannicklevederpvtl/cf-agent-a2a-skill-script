@@ -15,8 +15,8 @@ CF app: agent-a2a-alpha          CF app: agent-a2a-beta
 │  call_a2a_peer       │          │  call_a2a_peer       │
 │                      │          │                      │
 │  SkillRunner sidecar │          │  SkillRunner sidecar │
-│  (a2a-smoke,         │          │  (tanzu-network-     │
-│   a2a-requester)     │          │   release, etc.)     │
+│                      │          │  (tanzu-network-     │
+│                      │          │   release, etc.)     │
 └──────────────────────┘          └──────────────────────┘
 ```
 
